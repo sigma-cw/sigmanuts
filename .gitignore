@@ -1,0 +1,5 @@
+/app/sigmanuts/packages
+/app/sigmanuts/bin/Debug/
+/app/sigmanuts/bin/Release/
+/app/sigmanuts/obj
+/.vscode

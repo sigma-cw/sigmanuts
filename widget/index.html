@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    textarea {
+        vertical-align: bottom;
+    }
+
+    #output {
+        overflow: auto;
+    }
+
+    #output>p {
+        overflow-wrap: break-word;
+    }
+
+    #output span {
+        color: blue;
+    }
+
+    #output span.error {
+        color: red;
+    }
+</style>
+
+<body>
+    <h2>WebSocket Test</h2>
+    <textarea cols="60" rows="6"></textarea>
+    <button>send</button>
+    <div id="output"></div>
+</body>
+
+<script>
+    // http://www.websocket.org/echo.html
+    const button = document.querySelector("button");
+    const output = document.querySelector("#output");
+    const textarea = document.querySelector("textarea");
+    const wsUri = "ws://127.0.0.1:8080/";
+    
+    function connect() {
+        var ws = new WebSocket(wsUri);
+        ws.onopen = function () {
+            writeToScreen("CONNECTED");
+            doSend("WebSocket rocks");
+        };
+
+        ws.onmessage = function (e) {
+            writeToScreen(`<span>RESPONSE: ${e.data}</span>`);
+        };
+
+        ws.onclose = function (e) {
+            writeToScreen("DISCONNECTED");
+            setTimeout(function () {
+                connect();
+            }, 50);
+        };
+
+        ws.onerror = function (err) {
+            writeToScreen(`<span class="error">ERROR:</span> ${e.data}`);
+            ws.close();
+        };
+    }
+
+    function doSend(message) {
+        writeToScreen(`SENT: ${message}`);
+        websocket.send(message);
+    }
+
+    function writeToScreen(message) {
+        output.insertAdjacentHTML("afterbegin", `<p>${message}</p>`);
+    }
+
+    connect();   
+</script>
+
+</html>
